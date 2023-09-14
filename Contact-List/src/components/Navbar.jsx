@@ -5,7 +5,7 @@ export default function Navbar() {
                 <h1>Contact-List</h1>
             </div>
             <form className=" ">
-                <button className="btn btn-success ms-auto me-5" type="button">New contact</button>
+                <button className="btn btn-primary ms-auto me-5" type="button">New contact</button>
             </form>
         </nav>
     )
