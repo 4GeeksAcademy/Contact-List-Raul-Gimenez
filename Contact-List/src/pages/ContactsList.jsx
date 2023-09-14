@@ -80,6 +80,7 @@ export default function ContactsList() {
                       toDelete={()=>handleDeleteContact(contact.id)}
                     />
                     <DeleteModal toDelete={()=>handleDeleteContact(contact.id)} id={contact.id}/>
+                    <ModifyModal id={contact.id} updateContactList={setContactList}/>
                   </>
                 )
               })}

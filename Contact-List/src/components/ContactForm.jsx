@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import getLastId from "../utils/utils";
 import { Link } from "react-router-dom";
 
-export default function ContactForm({ modType }) {
+export default function ContactForm({ modType, modId, updateContactList }) {
     const [fullName, setFullName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
@@ -35,32 +35,62 @@ export default function ContactForm({ modType }) {
             return alert("formulario incorrecto, rellene todos los campos necesarios");
         }
 
-        const lastId = getLastId(contactList);
+        if (modType === "Modify") {
+            const updatedContactList = contactList.map((contact) =>
+                contact.id === modId
+                    ? {
+                          id: modId,
+                          fullName,
+                          phoneNumber,
+                          email,
+                          address,
+                          avatarURL,
+                      }
+                    : contact
+            );
 
-        const formData = {
-            id: lastId,
-            fullName,
-            phoneNumber,
-            email,
-            address,
-            avatarURL
-        };
+            try {
+                const res = await putData(updatedContactList);
+                console.log("Datos modificados correctamente", res);
+                alert("Datos modificados correctamente");
+                setFullName("");
+                setAddress("");
+                setEmail("");
+                setPhoneNumber("");
+                setAvatarURL("");
+                updateContactList(updatedContactList)
+            } catch (err) {
+                console.error("Error al modificar datos", err);
+            }
+        
+        
+        } else {
+            const lastId = getLastId(contactList);
 
-        contactList.push(formData)
+            const formData = {
+                id: lastId,
+                fullName,
+                phoneNumber,
+                email,
+                address,
+                avatarURL,
+            };
 
-        try {
-            const res = await putData(contactList);
-            console.log("Datos enviados correctamente", res);
-            alert("Datos enviados correctamente");
-            setFullName("");
-            setAddress("");
-            setEmail("");
-            setPhoneNumber("");
-            setAvatarURL("");
-            const updatedData = await getData();
-            setContactList(Object.values(updatedData));
-        } catch (err) {
-            console.error("Error al enviar datos", err);
+            const updatedContactList = [...contactList, formData];
+
+            try {
+                const res = await putData(updatedContactList);
+                console.log("Datos enviados correctamente", res);
+                alert("Datos enviados correctamente");
+                setFullName("");
+                setAddress("");
+                setEmail("");
+                setPhoneNumber("");
+                setAvatarURL("");
+                updateContactList(updatedContactList)
+            } catch (err) {
+                console.error("Error al enviar datos", err);
+            }
         }
     };
 
@@ -73,8 +103,11 @@ export default function ContactForm({ modType }) {
         )
     }
 
+
     return (
-        <div className="row align-items-center justify-content-center vh-100 text-center">
+
+
+        <div className={`row align-items-center justify-content-center ${modType !== "Modify" ? "vh-100" : "vh-75"} text-center`}>
             <h1>{modType} contact</h1>
             <form className="shadow-lg rounded w-75 h-75 p-5 text-start" onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -118,7 +151,7 @@ export default function ContactForm({ modType }) {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="addressInput" className="form-label">
-                        Address 
+                        Address
                     </label>
                     <input
                         type="text"
@@ -141,14 +174,26 @@ export default function ContactForm({ modType }) {
                         placeholder="http://example.com/example000"
                     />
                 </div>
-                <div className="d-block container mt-5">
-                    <button type="submit" className="btn btn-primary row">
-                        Save contact
-                    </button>
-                    <Link to="/" className="form-text row">
-                        Go back to contact page.
-                    </Link>
-                </div>
+                {
+                    modType !== "Modify" ?
+                        (<div className="d-block container mt-5">
+                            <button type="submit" className="btn btn-primary row">
+                                Save contact
+                            </button>
+                            <Link to="/" className="form-text row">
+                                Go back to contact page.
+                            </Link>
+                        </div>)
+                        :
+                        (<div className="d-flex justify-content-end mt-5 border-top">
+                            <button type="button" className="btn btn-secondary mt-2 me-2" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="submit" className="btn btn-primary mt-2" data-bs-dismiss="modal">
+                                Save changes
+                            </button>
+                        </div>)
+                }
             </form>
         </div>
     );
