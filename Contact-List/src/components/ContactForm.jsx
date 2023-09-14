@@ -1,8 +1,9 @@
-import { postData, getData } from "../services/fetch";
+import { putData, getData } from "../services/fetch";
 import { useEffect, useState } from "react";
 import getLastId from "../utils/utils";
+import { Link } from "react-router-dom";
 
-export default function AddNewContactForm({ data }) {
+export default function ContactForm({ modType }) {
     const [fullName, setFullName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
@@ -17,8 +18,7 @@ export default function AddNewContactForm({ data }) {
                 if (res === null) {
                     setContactList([]);
                 } else {
-                    const dataArray = Object.values(res);
-                    setContactList(dataArray);
+                    setContactList(res);
                 }
                 setIsLoading(false);
             })
@@ -35,8 +35,10 @@ export default function AddNewContactForm({ data }) {
             return alert("formulario incorrecto, rellene todos los campos necesarios");
         }
 
+        const lastId = getLastId(contactList);
+
         const formData = {
-            id: getLastId(contactList),
+            id: lastId,
             fullName,
             phoneNumber,
             email,
@@ -44,8 +46,10 @@ export default function AddNewContactForm({ data }) {
             avatarURL
         };
 
+        contactList.push(formData)
+
         try {
-            const res = await postData(formData);
+            const res = await putData(contactList);
             console.log("Datos enviados correctamente", res);
             alert("Datos enviados correctamente");
             setFullName("");
@@ -71,7 +75,7 @@ export default function AddNewContactForm({ data }) {
 
     return (
         <div className="row align-items-center justify-content-center vh-100 text-center">
-            <h1>Add new contact</h1>
+            <h1>{modType} contact</h1>
             <form className="shadow-lg rounded w-75 h-75 p-5 text-start" onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="nameInput" className="form-label">
@@ -141,9 +145,9 @@ export default function AddNewContactForm({ data }) {
                     <button type="submit" className="btn btn-primary row">
                         Save contact
                     </button>
-                    <a href="" className="form-text row">
+                    <Link to="/" className="form-text row">
                         Go back to contact page.
-                    </a>
+                    </Link>
                 </div>
             </form>
         </div>

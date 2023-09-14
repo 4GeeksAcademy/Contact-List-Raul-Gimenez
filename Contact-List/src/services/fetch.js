@@ -1,5 +1,7 @@
 const URL = "https://pruebas-raul-4geeks-default-rtdb.europe-west1.firebasedatabase.app/contact-list.json";
 
+import { useState, useEffect } from "react";
+
 export const getData = () => {
   return (
     fetch(URL)
@@ -16,9 +18,9 @@ export const getData = () => {
   )
 };
 
-export const postData = (data) => {
+export const putData = (data) => {
   return fetch(URL, {
-    method: "POST",
+    method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",

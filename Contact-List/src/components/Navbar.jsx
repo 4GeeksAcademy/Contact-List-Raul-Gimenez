@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Navbar() {
     return (
         <nav className="navbar col-12 bg-white mt-5">
@@ -5,7 +7,7 @@ export default function Navbar() {
                 <h1>Contact-List</h1>
             </div>
             <form className=" ">
-                <button className="btn btn-primary ms-auto me-5" type="button">New contact</button>
+                <Link to="/create" className="btn btn-primary ms-auto me-5">New contact</Link>
             </form>
         </nav>
     )

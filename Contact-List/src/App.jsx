@@ -1,15 +1,12 @@
 //import './App.css'
-import { useEffect, useState } from "react"
-import ContactList from "./pages/ContactList"
-import CreateContact from "./pages/CreateContact"
-
+import RouterApp from "./routes/Router"
 
 function App() {
  
   return (
-    <div className="container bg-white min-vh-100 shadow-lg">
-      <ContactList/>
-    </div>
+      <div className="container bg-white min-vh-100 shadow-lg">
+        <RouterApp/>
+      </div>
   )
 }
 
