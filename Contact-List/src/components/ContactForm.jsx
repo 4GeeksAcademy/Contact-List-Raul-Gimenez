@@ -182,7 +182,7 @@ export default function ContactForm({ modType, modId, updateContactList }) {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="AvatarInput" className="form-label d-flex">
-                        Avatar URL <i className="ms-auto me-0 form-text">Not required</i>
+                        Avatar URL <i className="ms-auto me-0 form-text">{modType !== "Modify" && "Not required"}</i>
                     </label>
                     <input
                         type="url"
