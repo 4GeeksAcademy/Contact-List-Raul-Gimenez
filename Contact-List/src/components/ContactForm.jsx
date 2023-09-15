@@ -28,24 +28,33 @@ export default function ContactForm({ modType, modId, updateContactList }) {
             });
     }, []);
 
+    useEffect(() => {
+        if (modType === "Modify" && modId) {
+            const contactToModify = contactList.find((contact) => contact.id === modId);
+            if (contactToModify) {
+                setFullName(contactToModify.fullName || "");
+                setPhoneNumber(contactToModify.phoneNumber || "");
+                setEmail(contactToModify.email || "");
+                setAddress(contactToModify.address || "");
+                setAvatarURL(contactToModify.avatarURL || "");
+            }
+        }
+    }, [modType, modId, contactList]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!fullName || !phoneNumber || !email || !address) {
-            return alert("formulario incorrecto, rellene todos los campos necesarios");
-        }
 
         if (modType === "Modify") {
             const updatedContactList = contactList.map((contact) =>
                 contact.id === modId
                     ? {
-                          id: modId,
-                          fullName,
-                          phoneNumber,
-                          email,
-                          address,
-                          avatarURL,
-                      }
+                        ...contact, // Copia todos los campos existentes
+                        fullName: fullName || contact.fullName,
+                        phoneNumber: phoneNumber || contact.phoneNumber,
+                        email: email || contact.email,
+                        address: address || contact.address,
+                        avatarURL: avatarURL || contact.avatarURL,
+                    }
                     : contact
             );
 
@@ -59,12 +68,17 @@ export default function ContactForm({ modType, modId, updateContactList }) {
                 setPhoneNumber("");
                 setAvatarURL("");
                 updateContactList(updatedContactList)
+                updateContactList(updatedContactList);
             } catch (err) {
                 console.error("Error al modificar datos", err);
             }
-        
-        
+
         } else {
+
+            if (!fullName || !phoneNumber || !email || !address) {
+                return alert("formulario incorrecto, rellene todos los campos necesarios");
+            }
+
             const lastId = getLastId(contactList);
 
             const formData = {
