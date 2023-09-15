@@ -22,6 +22,10 @@ export default function ContactCard({ fullName, phoneNumber, email, address, img
             });
     }, []);
 
+    const handleImageError = (e) => {
+        e.target.src = "https://yt3.googleusercontent.com/1SFBG2eSQQbPSqyUkfHQCYO0y34qpWlKh2fVwsXv_vaa0dwLStb9YoqQFEs348INFKRcJ5DoQEw=s900-c-k-c0x00ffffff-no-rj";
+    };
+
     if (itsExampleContact) {
         return (
             <li className="list-group-item row d-flex ps-5 py-3">
@@ -45,7 +49,7 @@ export default function ContactCard({ fullName, phoneNumber, email, address, img
             <li className="list-group-item row d-flex ps-5 py-3">
                 <div className="col-3">
                     <div className="ratio ratio-1x1">
-                        <img className="rounded-circle" src={imgUrl} alt="" />
+                        <img className="rounded-circle" src={imgUrl} alt="" onError={handleImageError}/>
                     </div>
                 </div>
                 <div className="col-6 ms-2 row">

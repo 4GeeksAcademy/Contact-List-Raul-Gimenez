@@ -120,6 +120,9 @@ export default function ContactForm({ modType, modId, updateContactList }) {
                         id="nameInput"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
+                        maxLength={50}
+                        minLength={2}
+                        pattern="^[A-Za-zÁáÉéÍíÓóÚúÜüÑñ\s]+$"
                     />
                 </div>
                 <div className="mb-3">
@@ -127,11 +130,13 @@ export default function ContactForm({ modType, modId, updateContactList }) {
                         Phone number
                     </label>
                     <input
-                        type="text"
+                        type="tel"
                         className="form-control"
                         id="numberInput"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
+                        pattern="^[+]?[\d\s\- ]+$"
+                        minLength={9}
                     />
                 </div>
                 <div className="mb-3">
@@ -166,7 +171,7 @@ export default function ContactForm({ modType, modId, updateContactList }) {
                         Avatar URL <i className="ms-auto me-0 form-text">Not required</i>
                     </label>
                     <input
-                        type="text"
+                        type="url"
                         className="form-control"
                         id="AvatarInput"
                         value={avatarURL}
